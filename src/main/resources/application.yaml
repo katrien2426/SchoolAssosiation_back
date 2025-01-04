@@ -1,0 +1,42 @@
+# 这里配置是后端服务的端口
+# 这里的8089是自定义的端口，你可以自己定义
+server:
+  port: 9090
+
+# 这里是连接数据库的配置
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/school_association?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: Wang-2242426
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      filters: stat,wall
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+
+# MyBatis的配置
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.katrien.pojo
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
