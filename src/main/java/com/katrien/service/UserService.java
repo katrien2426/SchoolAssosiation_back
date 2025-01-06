@@ -12,5 +12,6 @@ public interface UserService {
     boolean deleteUser(Integer userId);
     User login(String username, String password);
     boolean resetPassword(Integer userId, String newPassword);
+    boolean verifyAndResetPassword(Integer userId, String oldPassword, String newPassword);
     List<User> searchUsers(String keyword, String role);
 }

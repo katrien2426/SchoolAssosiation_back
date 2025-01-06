@@ -223,6 +223,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean verifyAndResetPassword(Integer userId, String oldPassword, String newPassword) {
+        User user = userMapper.getUserById(userId);
+        if (user != null && BCrypt.checkpw(oldPassword, user.getPasswordHash())) {
+            // 旧密码验证成功，设置新密码
+            String newHash = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+            return userMapper.updatePassword(userId, newHash) > 0;
+        }
+        return false;
+    }
+
+    @Override
     public List<User> searchUsers(String keyword, String role) {
         return userMapper.searchUsers(keyword, role);
     }

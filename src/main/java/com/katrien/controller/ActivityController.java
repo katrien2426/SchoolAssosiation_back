@@ -50,6 +50,12 @@ public class ActivityController {
         return Result.success(activities);
     }
 
+    @GetMapping("/status/{status}")
+    public Result<List<Activity>> getActivitiesByStatus(@PathVariable String status) {
+        List<Activity> activities = activityService.getByStatus(status);
+        return activities != null ? Result.success(activities) : Result.error("获取活动列表失败");
+    }
+
     @PostMapping
     public Result<Void> createActivity(@RequestBody Activity activity) {
         return activityService.createActivity(activity) ? Result.success() : Result.error("创建活动失败");

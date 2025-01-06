@@ -57,4 +57,12 @@ public class ClubController {
         Integer count = clubService.getClubCount();
         return R.success(count);
     }
+
+    @GetMapping("/search")
+    public R<List<Club>> searchClubs(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String status) {
+        List<Club> clubs = clubService.searchClubsByCondition(keyword, status);
+        return R.success(clubs);
+    }
 }

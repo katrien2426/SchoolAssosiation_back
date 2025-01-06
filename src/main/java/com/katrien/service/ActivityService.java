@@ -11,4 +11,5 @@ public interface ActivityService {
     boolean createActivity(Activity activity);
     boolean updateActivity(Activity activity);
     boolean deleteActivity(Integer activityId);
+    List<Activity> getByStatus(String status);
 }

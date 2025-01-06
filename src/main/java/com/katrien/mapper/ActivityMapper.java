@@ -10,25 +10,31 @@ import java.util.List;
 public interface ActivityMapper {
     @Select({
         "<script>",
-        "SELECT a.*, c.club_name, u.username as creator_name ",
-        "FROM activities a ",
-        "LEFT JOIN clubs c ON a.club_id = c.club_id ",
-        "LEFT JOIN users u ON a.created_by = u.user_id ",
-        "WHERE 1=1",
-        "<if test='activityName != null and activityName != \"\"'>",
-        "  AND a.activity_name LIKE CONCAT('%', #{activityName}, '%')",
+        "SELECT a.*, c.club_name, u.username as creator_name",
+        "FROM activities a",
+        "LEFT JOIN clubs c ON a.club_id = c.club_id",
+        "LEFT JOIN users u ON a.created_by = u.user_id",
+        "<where>",
+        "<if test='activityName != null and activityName.trim() != \"\"'>",
+        "    AND a.activity_name LIKE CONCAT('%', #{activityName}, '%')",
         "</if>",
-        "<if test='status != null and status != \"\"'>",
-        "  AND (",
-        "    CASE",
-        "      WHEN #{status} = 'ongoing' THEN",
-        "        a.start_date &lt;= NOW() AND a.end_date > NOW() AND a.status = 'approved'",
-        "      WHEN #{status} = 'completed' THEN",
-        "        a.end_date &lt;= NOW() AND a.status = 'approved'",
-        "      ELSE a.status = #{status}",
-        "    END",
-        "  )",
+        "<if test='status != null and status.trim() != \"\"'>",
+        "    <choose>",
+        "        <when test='status == \"ongoing\"'>",
+        "            AND a.status = 'approved'",
+        "            AND a.start_date &lt;= NOW()",
+        "            AND a.end_date > NOW()",
+        "        </when>",
+        "        <when test='status == \"completed\"'>",
+        "            AND a.status = 'approved'",
+        "            AND a.end_date &lt;= NOW()",
+        "        </when>",
+        "        <otherwise>",
+        "            AND a.status = #{status}",
+        "        </otherwise>",
+        "    </choose>",
         "</if>",
+        "</where>",
         "ORDER BY a.start_date DESC",
         "</script>"
     })
@@ -56,6 +62,14 @@ public interface ActivityMapper {
             "WHERE a.created_by = #{advisorId} " +
             "ORDER BY a.start_date DESC")
     List<Activity> getActivitiesByAdvisorId(Integer advisorId);
+
+    @Select("SELECT a.*, c.club_name, u.username as creator_name " +
+            "FROM activities a " +
+            "LEFT JOIN clubs c ON a.club_id = c.club_id " +
+            "LEFT JOIN users u ON a.created_by = u.user_id " +
+            "WHERE a.status = #{status} " +
+            "ORDER BY a.start_date DESC")
+    List<Activity> getByStatus(@Param("status") String status);
 
     @Insert("INSERT INTO activities(club_id, activity_name, description, start_date, end_date, " +
             "location, max_participants, status, created_by) " +

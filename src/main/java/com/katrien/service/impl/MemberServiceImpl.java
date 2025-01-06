@@ -58,4 +58,15 @@ public class MemberServiceImpl implements MemberService {
     public int countActiveMembers(Integer clubId) {
         return memberMapper.countActiveMembers(clubId);
     }
+
+    @Override
+    public List<Member> searchMembers(Integer clubId, String name, String studentId, String role) {
+        // 调用五参数版本，状态参数传null
+        return searchMembers(clubId, name, studentId, role, null);
+    }
+
+    @Override
+    public List<Member> searchMembers(Integer clubId, String name, String studentId, String role, String status) {
+        return memberMapper.searchMembers(clubId, name, studentId, role, status);
+    }
 }

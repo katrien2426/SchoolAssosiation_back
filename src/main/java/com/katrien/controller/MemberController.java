@@ -69,9 +69,9 @@ public class MemberController {
             response.setCharacterEncoding("utf-8");
             String fileName = URLEncoder.encode("社团成员导入模板", "UTF-8");
             response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
-            
+
             List<MemberExcel> list = new ArrayList<>();
-            
+
             // 添加副社长示例
             MemberExcel vicePresident = new MemberExcel();
             vicePresident.setName("张三");
@@ -79,7 +79,7 @@ public class MemberController {
             vicePresident.setRole(ROLE_VICE_PRESIDENT);
             vicePresident.setContactInfo("13800138000");
             list.add(vicePresident);
-            
+
             // 添加普通成员示例
             MemberExcel member = new MemberExcel();
             member.setName("李四");
@@ -87,7 +87,7 @@ public class MemberController {
             member.setRole(ROLE_MEMBER);
             member.setContactInfo("13800138001");
             list.add(member);
-            
+
             EasyExcel.write(response.getOutputStream(), MemberExcel.class)
                     .sheet("成员名单模板")
                     .doWrite(list);
@@ -114,18 +114,18 @@ public class MemberController {
                     member.setClubId(clubId);
                     member.setName(excel.getName());
                     member.setStudentId(excel.getStudentId());
-                    
+
                     // 验证和设置角色
                     String role = excel.getRole().trim();
                     if (!role.equals(ROLE_VICE_PRESIDENT) && !role.equals(ROLE_MEMBER)) {
                         role = ROLE_MEMBER; // 默认设置为普通成员
                     }
                     member.setRole(role);
-                    
+
                     member.setContactInfo(excel.getContactInfo());
                     member.setStatus("active");
                     member.setJoinDate(LocalDate.now());
-                    
+
                     if (memberService.createMember(member)) {
                         successList.add(member);
                     }
@@ -156,12 +156,12 @@ public class MemberController {
                 excel.setContactInfo(member.getContactInfo());
                 return excel;
             }).collect(Collectors.toList());
-            
+
             response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             response.setCharacterEncoding("utf-8");
             String fileName = URLEncoder.encode("社团成员名单", "UTF-8");
             response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
-            
+
             EasyExcel.write(response.getOutputStream(), MemberExcel.class)
                     .sheet("成员名单")
                     .doWrite(excelList);
@@ -175,30 +175,34 @@ public class MemberController {
             @PathVariable("clubId") Integer clubId,
             @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "studentId", required = false) String studentId,
-            @RequestParam(value = "role", required = false) String role) {
-        
+            @RequestParam(value = "role", required = false) String role,
+            @RequestParam(value = "status", required = false) String status) {
+
         List<Member> members = memberService.getMembersByClubId(clubId);
-        
+
         // 如果没有搜索条件，返回所有成员
-        if ((name == null || name.isEmpty()) && 
-            (studentId == null || studentId.isEmpty()) && 
-            (role == null || role.isEmpty())) {
+        if ((name == null || name.isEmpty()) &&
+                (studentId == null || studentId.isEmpty()) &&
+                (role == null || role.isEmpty()) &&
+                (status == null || status.isEmpty())) {
             return R.success(members);
         }
-        
+
         // 根据条件筛选
         List<Member> filteredMembers = members.stream()
-            .filter(member -> {
-                boolean matchName = name == null || name.isEmpty() || 
-                                  member.getName().toLowerCase().contains(name.toLowerCase());
-                boolean matchStudentId = studentId == null || studentId.isEmpty() || 
-                                       member.getStudentId().contains(studentId);
-                boolean matchRole = role == null || role.isEmpty() || 
-                                  member.getRole().equals(role);
-                return matchName && matchStudentId && matchRole;
-            })
-            .collect(Collectors.toList());
-        
+                .filter(member -> {
+                    boolean matchName = name == null || name.isEmpty() ||
+                            member.getName().toLowerCase().contains(name.toLowerCase());
+                    boolean matchStudentId = studentId == null || studentId.isEmpty() ||
+                            member.getStudentId().contains(studentId);
+                    boolean matchRole = role == null || role.isEmpty() ||
+                            member.getRole().equals(role);
+                    boolean matchStatus = status == null || status.isEmpty() ||
+                            member.getStatus().equals(status);
+                    return matchName && matchStudentId && matchRole && matchStatus;
+                })
+                .collect(Collectors.toList());
+
         return R.success(filteredMembers);
     }
 }

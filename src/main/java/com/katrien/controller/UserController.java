@@ -189,27 +189,30 @@ public class UserController {
         }
     }
 
-    @PostMapping("/{userId}/reset-password")
-    public ResponseEntity<Map<String, Object>> resetPassword(
+    @PutMapping("/{userId}/password")
+    public ResponseEntity<Map<String, Object>> updatePassword(  // 改名为 updatePassword
             @PathVariable Integer userId,
             @RequestBody Map<String, String> request) {
         Map<String, Object> response = new HashMap<>();
         
+        String oldPassword = request.get("oldPassword");
         String newPassword = request.get("newPassword");
-        if (newPassword == null || newPassword.trim().isEmpty()) {
+        
+        if (oldPassword == null || newPassword == null || 
+            oldPassword.trim().isEmpty() || newPassword.trim().isEmpty()) {
             response.put("code", 400);
-            response.put("message", "新密码不能为空");
+            response.put("message", "新密码和原密码不能为空");
             return ResponseEntity.badRequest().body(response);
         }
         
-        if (userService.resetPassword(userId, newPassword)) {
+        if (userService.verifyAndResetPassword(userId, oldPassword, newPassword)) {
             response.put("code", 200);
             response.put("message", "密码重置成功");
             return ResponseEntity.ok(response);
         } else {
-            response.put("code", 500);
-            response.put("message", "密码重置失败");
-            return ResponseEntity.status(500).body(response);
+            response.put("code", 400);
+            response.put("message", "原密码验证失败");
+            return ResponseEntity.status(400).body(response);
         }
     }
 

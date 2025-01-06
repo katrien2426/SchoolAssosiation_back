@@ -53,4 +53,14 @@ public class ActivityServiceImpl implements ActivityService {
     public boolean deleteActivity(Integer id) {
         return activityMapper.deleteActivity(id) > 0;
     }
+
+    @Override
+    public List<Activity> getByStatus(String status) {
+        try {
+            return activityMapper.getByStatus(status);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

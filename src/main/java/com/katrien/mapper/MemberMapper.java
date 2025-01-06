@@ -31,4 +31,26 @@ public interface MemberMapper {
 
     @Select("SELECT COUNT(*) FROM members WHERE club_id = #{clubId} AND status = 'active'")
     int countActiveMembers(Integer clubId);
+
+    @Select({"<script>",
+            "SELECT * FROM members",
+            "WHERE club_id = #{clubId}",
+            "<if test='name != null and name != \"\"'>",
+            "   AND name LIKE CONCAT('%', #{name}, '%')",
+            "</if>",
+            "<if test='studentId != null and studentId != \"\"'>",
+            "   AND student_id = #{studentId}",
+            "</if>",
+            "<if test='role != null and role != \"\"'>",
+            "   AND role = #{role}",
+            "</if>",
+            "<if test='status != null and status != \"\"'>",
+            "   AND status = #{status}",
+            "</if>",
+            "</script>"})
+    List<Member> searchMembers(@Param("clubId") Integer clubId, 
+                             @Param("name") String name, 
+                             @Param("studentId") String studentId, 
+                             @Param("role") String role,
+                             @Param("status") String status);
 }

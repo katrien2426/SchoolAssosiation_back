@@ -41,4 +41,9 @@ public class HonorServiceImpl implements HonorService {
     public boolean deleteHonor(Integer honorId) {
         return honorMapper.deleteHonor(honorId) > 0;
     }
+
+    @Override
+    public List<Honor> getHonorsByCondition(String honorLevel, Integer clubId, String honorName) {
+        return honorMapper.getHonorsByCondition(honorLevel, clubId, honorName);
+    }
 }

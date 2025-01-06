@@ -1,7 +1,7 @@
 package com.katrien.pojo;
 
 import lombok.Data;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Data
@@ -10,8 +10,8 @@ public class Club {
     private String clubName;  // 改为clubName以匹配数据库的club_name字段
     private String description;
     
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS", timezone = "GMT+8")
-    private LocalDateTime creationDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate creationDate;  // 确保使用 LocalDate 而不是 LocalDateTime
     
     private Integer presidentId;
     private String unit;

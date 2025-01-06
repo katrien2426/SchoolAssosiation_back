@@ -48,4 +48,14 @@ public class ClubServiceImpl implements ClubService {
     public Integer getClubCount() {
         return clubMapper.selectCount(null);
     }
+
+    @Override
+    public List<Club> searchClubs(String keyword) {
+        return keyword == null ? getAllClubs() : clubMapper.searchClubs(keyword);
+    }
+
+    @Override
+    public List<Club> searchClubsByCondition(String keyword, String status) {
+        return clubMapper.searchClubsByCondition(keyword, status);
+    }
 }

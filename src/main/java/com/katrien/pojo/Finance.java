@@ -1,5 +1,6 @@
 package com.katrien.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -9,7 +10,10 @@ public class Finance {
     private BigDecimal amount;
     private String type;
     private String description;
+    
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime transactionDate;
+    
     private Integer recordedBy;
     private String clubName; // 用于显示社团名称，不存储在数据库中
 

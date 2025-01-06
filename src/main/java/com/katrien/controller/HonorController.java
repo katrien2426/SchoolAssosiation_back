@@ -20,8 +20,18 @@ public class HonorController {
     private HonorService honorService;
 
     @GetMapping
-    public ResponseEntity<Map<String, Object>> getAllHonors() {
-        List<Honor> honors = honorService.getAllHonors();
+    public ResponseEntity<Map<String, Object>> getAllHonors(
+            @RequestParam(required = false) String honorLevel,
+            @RequestParam(required = false) Integer clubId,
+            @RequestParam(required = false) String honorName) {
+        
+        List<Honor> honors;
+        if (honorLevel != null || clubId != null || honorName != null) {
+            honors = honorService.getHonorsByCondition(honorLevel, clubId, honorName);
+        } else {
+            honors = honorService.getAllHonors();
+        }
+        
         Map<String, Object> response = new HashMap<>();
         response.put("code", 200);
         response.put("message", "获取荣誉列表成功");

@@ -24,4 +24,10 @@ public interface ClubService {
     
     // 获取社团总数
     Integer getClubCount();
+    
+    // 根据社团名称搜索社团
+    List<Club> searchClubs(String keyword);
+    
+    // 根据条件搜索社团
+    List<Club> searchClubsByCondition(String keyword, String status);
 }

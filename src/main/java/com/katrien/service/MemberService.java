@@ -11,4 +11,6 @@ public interface MemberService {
     boolean updateMember(Member member);
     boolean deleteMember(Integer memberId);
     int countActiveMembers(Integer clubId);
+    List<Member> searchMembers(Integer clubId, String name, String studentId, String role);
+    List<Member> searchMembers(Integer clubId, String name, String studentId, String role, String status);
 }
