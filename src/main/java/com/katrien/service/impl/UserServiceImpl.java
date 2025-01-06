@@ -221,4 +221,9 @@ public class UserServiceImpl implements UserService {
         }
         return false;
     }
+
+    @Override
+    public List<User> searchUsers(String keyword, String role) {
+        return userMapper.searchUsers(keyword, role);
+    }
 }

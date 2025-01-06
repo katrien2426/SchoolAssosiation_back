@@ -34,8 +34,16 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<Map<String, Object>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity<Map<String, Object>> getAllUsers(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String role) {
+        List<User> users;
+        if ((keyword != null && !keyword.isEmpty()) || (role != null && !role.isEmpty())) {
+            users = userService.searchUsers(keyword, role);
+        } else {
+            users = userService.getAllUsers();
+        }
+        
         Map<String, Object> response = new HashMap<>();
         response.put("code", 200);
         response.put("message", "获取用户列表成功");

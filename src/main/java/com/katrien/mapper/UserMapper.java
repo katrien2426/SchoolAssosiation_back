@@ -35,4 +35,19 @@ public interface UserMapper {
 
     @Select("SELECT * FROM users WHERE club_id = #{clubId} AND role = 'club_president' LIMIT 1")
     User getClubPresident(Integer clubId);
+
+    @Select({
+        "<script>",
+        "SELECT * FROM users",
+        "<where>",
+        "    <if test='keyword != null and keyword != \"\"'>",
+        "        AND (username LIKE CONCAT('%',#{keyword},'%') OR real_name LIKE CONCAT('%',#{keyword},'%'))",
+        "    </if>",
+        "    <if test='role != null and role != \"\"'>",
+        "        AND role = #{role}",
+        "    </if>",
+        "</where>",
+        "</script>"
+    })
+    List<User> searchUsers(@Param("keyword") String keyword, @Param("role") String role);
 }
