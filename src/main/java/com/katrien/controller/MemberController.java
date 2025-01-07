@@ -3,7 +3,7 @@ package com.katrien.controller;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.read.listener.ReadListener;
-import com.katrien.common.R;
+import com.katrien.common.Result;
 import com.katrien.pojo.Member;
 import com.katrien.pojo.MemberExcel;
 import com.katrien.service.MemberService;
@@ -32,34 +32,34 @@ public class MemberController {
     private static final String ROLE_MEMBER = "普通成员";
 
     @GetMapping("/club/{clubId}")
-    public R<List<Member>> getMembersByClubId(@PathVariable("clubId") Integer clubId) {
+    public Result<List<Member>> getMembersByClubId(@PathVariable("clubId") Integer clubId) {
         List<Member> members = memberService.getMembersByClubId(clubId);
-        return R.success(members);
+        return Result.success(members);
     }
 
     @GetMapping("/{memberId}")
-    public R<Member> getMemberById(@PathVariable("memberId") Integer memberId) {
+    public Result<Member> getMemberById(@PathVariable("memberId") Integer memberId) {
         Member member = memberService.getMemberById(memberId);
-        return member != null ? R.success(member) : R.error("成员不存在");
+        return member != null ? Result.success(member) : Result.error("成员不存在");
     }
 
     @PostMapping
-    public R<String> createMember(@RequestBody Member member) {
+    public Result<String> createMember(@RequestBody Member member) {
         boolean result = memberService.createMember(member);
-        return result ? R.success("创建成功") : R.error("创建失败");
+        return result ? Result.success("创建成功") : Result.error("创建失败");
     }
 
     @PutMapping("/{memberId}")
-    public R<String> updateMember(@PathVariable("memberId") Integer memberId, @RequestBody Member member) {
+    public Result<String> updateMember(@PathVariable("memberId") Integer memberId, @RequestBody Member member) {
         member.setMemberId(memberId);
         boolean result = memberService.updateMember(member);
-        return result ? R.success("更新成功") : R.error("更新失败");
+        return result ? Result.success("更新成功") : Result.error("更新失败");
     }
 
     @DeleteMapping("/{memberId}")
-    public R<String> deleteMember(@PathVariable("memberId") Integer memberId) {
+    public Result<String> deleteMember(@PathVariable("memberId") Integer memberId) {
         boolean result = memberService.deleteMember(memberId);
-        return result ? R.success("删除成功") : R.error("删除失败");
+        return result ? Result.success("删除成功") : Result.error("删除失败");
     }
 
     @GetMapping("/template")
@@ -104,7 +104,7 @@ public class MemberController {
     }
 
     @PostMapping("/import/{clubId}")
-    public R<String> importMembers(@PathVariable("clubId") Integer clubId, @RequestParam("file") MultipartFile file) {
+    public Result<String> importMembers(@PathVariable("clubId") Integer clubId, @RequestParam("file") MultipartFile file) {
         try {
             List<Member> successList = new ArrayList<>();
             EasyExcel.read(file.getInputStream(), MemberExcel.class, new ReadListener<MemberExcel>() {
@@ -137,10 +137,10 @@ public class MemberController {
                 }
             }).sheet().doRead();
 
-            return R.success("成功导入 " + successList.size() + " 条记录");
+            return Result.success("成功导入 " + successList.size() + " 条记录");
         } catch (Exception e) {
             e.printStackTrace();
-            return R.error("导入失败：" + e.getMessage());
+            return Result.error("导入失败：" + e.getMessage());
         }
     }
 
@@ -171,7 +171,7 @@ public class MemberController {
     }
 
     @GetMapping("/search/{clubId}")
-    public R<List<Member>> searchMembers(
+    public Result<List<Member>> searchMembers(
             @PathVariable("clubId") Integer clubId,
             @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "studentId", required = false) String studentId,
@@ -185,7 +185,7 @@ public class MemberController {
                 (studentId == null || studentId.isEmpty()) &&
                 (role == null || role.isEmpty()) &&
                 (status == null || status.isEmpty())) {
-            return R.success(members);
+            return Result.success(members);
         }
 
         // 根据条件筛选
@@ -203,6 +203,6 @@ public class MemberController {
                 })
                 .collect(Collectors.toList());
 
-        return R.success(filteredMembers);
+        return Result.success(filteredMembers);
     }
 }

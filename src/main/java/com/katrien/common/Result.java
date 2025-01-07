@@ -1,11 +1,17 @@
 package com.katrien.common;
 
+import lombok.Data;
+
+/**
+ *  @author : Katrien
+ *  封装通用的返回结果，包括状态码、消息和数据
+ * @param <T>
+ */
+@Data
 public class Result<T> {
     private Integer code;
     private String message;
     private T data;
-
-    public Result() {}
 
     public Result(Integer code, String message) {
         this.code = code;
@@ -32,30 +38,5 @@ public class Result<T> {
 
     public static <T> Result<T> error(Integer code, String message) {
         return new Result<>(code, message);
-    }
-
-    // Getters and Setters
-    public Integer getCode() {
-        return code;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
     }
 }

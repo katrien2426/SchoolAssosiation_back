@@ -5,10 +5,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+    @author : Katrien
+    定义了一个认证拦截器，用于验证用户是否已登录
+    实现了HandlerInterceptor接口，用于在Spring MVC请求处理过程中拦截请求
+ */
 public class AuthInterceptor implements HandlerInterceptor {
 
+    // 发送未授权响应
     private void sendUnauthorizedResponse(HttpServletResponse response) throws IOException {
-        response.setStatus(HttpServletResponse.SC_OK);  // 修改这里，返回200而不是401
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setHeader("WWW-Authenticate", "Bearer realm=\"api\"");
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write("{\"code\":401,\"message\":\"未登录\"}");
     }
