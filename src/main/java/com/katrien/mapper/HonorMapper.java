@@ -2,9 +2,12 @@ package com.katrien.mapper;
 
 import com.katrien.pojo.Honor;
 import org.apache.ibatis.annotations.*;
-
 import java.util.List;
 
+/**
+ * @author : Katrien
+ * @description : 荣誉Mapper
+ */
 @Mapper
 public interface HonorMapper {
     @Select("SELECT h.*, c.club_name FROM club_honors h " +

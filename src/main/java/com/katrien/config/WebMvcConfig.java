@@ -6,11 +6,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
 import java.time.format.DateTimeFormatter;
 
+/**
+ * @author : Katrien
+ * @description : Spring MVC的配置类，用于设置应用程序的MvcConfig
+ */
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
+    // 定义了一个日期格式字符串，用于 JSON 序列化和反序列化
     private static final String dateFormat = "yyyy-MM-dd";
 
     @Bean
@@ -19,16 +23,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
             builder.simpleDateFormat(dateFormat);
             builder.serializers(new LocalDateSerializer(DateTimeFormatter.ofPattern(dateFormat)));
         };
-    }
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new AuthInterceptor())
-                .addPathPatterns("/api/**") // 拦截所有API请求
-                .excludePathPatterns(
-                        "/api/users/login", // 不拦截登录
-                        "/api/users/register", // 不拦截注册
-                        "/error" // 不拦截错误页面
-                );
     }
 }

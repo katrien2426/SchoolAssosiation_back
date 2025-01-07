@@ -5,7 +5,6 @@ import com.katrien.pojo.Club;
 import com.katrien.service.ClubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -40,18 +39,8 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public List<Club> getActiveClubs() {
-        return clubMapper.getActiveClubs();
-    }
-
-    @Override
     public Integer getClubCount() {
         return clubMapper.selectCount(null);
-    }
-
-    @Override
-    public List<Club> searchClubs(String keyword) {
-        return keyword == null ? getAllClubs() : clubMapper.searchClubs(keyword);
     }
 
     @Override

@@ -5,9 +5,12 @@ import com.katrien.pojo.Honor;
 import com.katrien.service.HonorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
+/**
+ * @author : Katrien
+ * @description : 社团荣誉控制器
+ */
 @RestController
 @RequestMapping("/api/club-honors")
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true", maxAge = 3600)
@@ -28,7 +31,6 @@ public class HonorController {
         } else {
             honors = honorService.getAllHonors();
         }
-
         return Result.success(honors);
     }
 

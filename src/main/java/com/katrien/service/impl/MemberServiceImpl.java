@@ -5,7 +5,6 @@ import com.katrien.pojo.Member;
 import com.katrien.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,11 +21,6 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<Member> getMembersByClubId(Integer clubId) {
         return memberMapper.getMembersByClubId(clubId);
-    }
-
-    @Override
-    public Member getMemberByStudentId(String studentId) {
-        return memberMapper.getMemberByStudentId(studentId);
     }
 
     @Override
@@ -52,17 +46,6 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public boolean deleteMember(Integer memberId) {
         return memberMapper.deleteMember(memberId) > 0;
-    }
-
-    @Override
-    public int countActiveMembers(Integer clubId) {
-        return memberMapper.countActiveMembers(clubId);
-    }
-
-    @Override
-    public List<Member> searchMembers(Integer clubId, String name, String studentId, String role) {
-        // 调用五参数版本，状态参数传null
-        return searchMembers(clubId, name, studentId, role, null);
     }
 
     @Override

@@ -10,11 +10,11 @@ public class User {
     private String realName;
     private String email;
     private String phone;
-    private String role;  // 'club_president' or 'admin'
+    private String role;
     private Integer clubId;
     private LocalDateTime createdAt;
     private LocalDateTime lastLoginAt;
-    @Transient  // 添加这个注解，表示这个字段不会被持久化到数据库
+    @Transient
     private String password;
 
     // Getters and Setters
@@ -71,7 +71,6 @@ public class User {
     }
 
     public void setRole(String role) {
-        // 确保角色值有效
         if ("club_president".equals(role) || "admin".equals(role)) {
             this.role = role;
         } else {

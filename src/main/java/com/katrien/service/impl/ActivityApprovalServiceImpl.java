@@ -8,7 +8,6 @@ import com.katrien.service.ActivityApprovalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,18 +20,8 @@ public class ActivityApprovalServiceImpl implements ActivityApprovalService {
     private ActivityMapper activityMapper;
 
     @Override
-    public ActivityApproval getApprovalById(Integer approvalId) {
-        return approvalMapper.getApprovalById(approvalId);
-    }
-
-    @Override
     public ActivityApproval getApprovalByActivityId(Integer activityId) {
         return approvalMapper.getApprovalByActivityId(activityId);
-    }
-
-    @Override
-    public List<ActivityApproval> getApprovalsByStatus(String status) {
-        return approvalMapper.getApprovalsByStatus(status);
     }
 
     @Override
@@ -58,11 +47,6 @@ public class ActivityApprovalServiceImpl implements ActivityApprovalService {
     @Override
     public boolean deleteApproval(Integer approvalId) {
         return approvalMapper.deleteApproval(approvalId) > 0;
-    }
-
-    @Override
-    public List<ActivityApproval> getPendingApprovals() {
-        return approvalMapper.getPendingApprovals();
     }
 
     @Override

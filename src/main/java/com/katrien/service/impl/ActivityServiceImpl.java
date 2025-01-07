@@ -5,8 +5,6 @@ import com.katrien.pojo.Activity;
 import com.katrien.service.ActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -32,11 +30,6 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public List<Activity> getActivitiesByClubId(Integer clubId) {
         return activityMapper.getActivitiesByClubId(clubId);
-    }
-
-    @Override
-    public List<Activity> getActivitiesByAdvisorId(Integer advisorId) {
-        return activityMapper.getActivitiesByAdvisorId(advisorId);
     }
 
     @Override

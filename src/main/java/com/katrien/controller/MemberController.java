@@ -10,7 +10,6 @@ import com.katrien.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -19,6 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author : Katrien
+ * @description : 成员控制器
+ */
 @RestController
 @RequestMapping("/api/members")
 public class MemberController {
@@ -26,8 +29,6 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    // 角色枚举值
-    private static final String ROLE_PRESIDENT = "社长";
     private static final String ROLE_VICE_PRESIDENT = "副社长";
     private static final String ROLE_MEMBER = "普通成员";
 
@@ -63,13 +64,19 @@ public class MemberController {
     }
 
     @GetMapping("/template")
+    //下载模板
     public void downloadTemplate(HttpServletResponse response) {
         try {
+            // 设置响应头
             response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            // 设置响应编码
             response.setCharacterEncoding("utf-8");
+            // 设置下载文件名
             String fileName = URLEncoder.encode("社团成员导入模板", "UTF-8");
+            // 设置响应头
             response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
 
+            // 构建模板
             List<MemberExcel> list = new ArrayList<>();
 
             // 添加副社长示例
@@ -104,11 +111,14 @@ public class MemberController {
     }
 
     @PostMapping("/import/{clubId}")
+    //导入成员
     public Result<String> importMembers(@PathVariable("clubId") Integer clubId, @RequestParam("file") MultipartFile file) {
         try {
             List<Member> successList = new ArrayList<>();
+            // 读取文件
             EasyExcel.read(file.getInputStream(), MemberExcel.class, new ReadListener<MemberExcel>() {
                 @Override
+                // 读取到一行数据后的操作
                 public void invoke(MemberExcel excel, AnalysisContext context) {
                     Member member = new Member();
                     member.setClubId(clubId);
@@ -136,7 +146,6 @@ public class MemberController {
                     // 解析完所有数据后的操作
                 }
             }).sheet().doRead();
-
             return Result.success("成功导入 " + successList.size() + " 条记录");
         } catch (Exception e) {
             e.printStackTrace();
@@ -144,10 +153,13 @@ public class MemberController {
         }
     }
 
+    //导出成员
     @GetMapping("/export/{clubId}")
     public void exportMembers(@PathVariable("clubId") Integer clubId, HttpServletResponse response) {
         try {
+            // 查询社团成员
             List<Member> members = memberService.getMembersByClubId(clubId);
+            // 将成员对象转换为Excel对象
             List<MemberExcel> excelList = members.stream().map(member -> {
                 MemberExcel excel = new MemberExcel();
                 excel.setName(member.getName());
@@ -157,11 +169,12 @@ public class MemberController {
                 return excel;
             }).collect(Collectors.toList());
 
+            // 设置响应
             response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             response.setCharacterEncoding("utf-8");
             String fileName = URLEncoder.encode("社团成员名单", "UTF-8");
             response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
-
+            // 写入Excel
             EasyExcel.write(response.getOutputStream(), MemberExcel.class)
                     .sheet("成员名单")
                     .doWrite(excelList);
@@ -170,6 +183,7 @@ public class MemberController {
         }
     }
 
+    // 搜索成员
     @GetMapping("/search/{clubId}")
     public Result<List<Member>> searchMembers(
             @PathVariable("clubId") Integer clubId,

@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.Map;
 
+/**
+ * @author : Katrien
+ * @description : 统计控制器
+ */
 @RestController
 @RequestMapping("/api/statistics")
 public class StatisticsController {

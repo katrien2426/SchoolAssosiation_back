@@ -9,6 +9,5 @@ public interface HonorService {
     boolean createHonor(Honor honor);
     boolean updateHonor(Honor honor);
     boolean deleteHonor(Integer honorId);
-    
     List<Honor> getHonorsByCondition(String honorLevel, Integer clubId, String honorName);
 }

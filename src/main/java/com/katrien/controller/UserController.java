@@ -6,11 +6,14 @@ import com.katrien.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author : Katrien
+ * @description : 用户控制器
+ */
 @RestController
 @RequestMapping("/api/users")
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true", maxAge = 3600)
@@ -31,6 +34,14 @@ public class UserController {
     @GetMapping
     public Result<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
+        return Result.success(users);
+    }
+
+    @GetMapping("/search")
+    public Result<List<User>> searchUsers(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String role) {
+        List<User> users = userService.searchUsers(keyword, role);
         return Result.success(users);
     }
 

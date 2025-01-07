@@ -6,6 +6,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * @author : Katrien
+ * @description : 活动状态更新定时任务
+ */
 @Component
 public class ActivityStatusScheduler {
     

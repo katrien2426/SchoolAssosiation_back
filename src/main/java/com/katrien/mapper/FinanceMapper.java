@@ -2,9 +2,12 @@ package com.katrien.mapper;
 
 import com.katrien.pojo.Finance;
 import org.apache.ibatis.annotations.*;
-
 import java.util.List;
 
+/**
+ * @author : Katrien
+ * @description :财务Mapper
+ */
 @Mapper
 public interface FinanceMapper {
     @Select("SELECT f.*, c.club_name FROM finances f " +

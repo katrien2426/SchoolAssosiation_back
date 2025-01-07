@@ -2,9 +2,12 @@ package com.katrien.mapper;
 
 import com.katrien.pojo.ActivityApproval;
 import org.apache.ibatis.annotations.*;
-
 import java.util.List;
 
+/**
+ * @author : Katrien
+ * @description : 活动审批Mapper
+ */
 @Mapper
 public interface ActivityApprovalMapper {
     @Select("SELECT * FROM activity_approvals WHERE approval_id = #{approvalId}")
@@ -12,9 +15,6 @@ public interface ActivityApprovalMapper {
 
     @Select("SELECT * FROM activity_approvals WHERE activity_id = #{activityId} ORDER BY submission_date DESC LIMIT 1")
     ActivityApproval getApprovalByActivityId(Integer activityId);
-
-    @Select("SELECT * FROM activity_approvals WHERE status = #{status}")
-    List<ActivityApproval> getApprovalsByStatus(String status);
 
     @Select("SELECT * FROM activity_approvals WHERE activity_id = #{activityId} ORDER BY submission_date DESC")
     List<ActivityApproval> getApprovalsByActivityId(Integer activityId);
@@ -31,7 +31,4 @@ public interface ActivityApprovalMapper {
 
     @Delete("DELETE FROM activity_approvals WHERE approval_id = #{approvalId}")
     int deleteApproval(Integer approvalId);
-
-    @Select("SELECT * FROM activity_approvals WHERE status = 'pending' ORDER BY submission_date")
-    List<ActivityApproval> getPendingApprovals();
 }

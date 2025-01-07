@@ -5,9 +5,12 @@ import com.katrien.pojo.Club;
 import com.katrien.service.ClubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
+/**
+ * @author : Katrien
+ * @description : 社团控制器
+ */
 @RestController
 @RequestMapping("/api/clubs")
 public class ClubController {
@@ -44,12 +47,6 @@ public class ClubController {
     public Result<String> deleteClub(@PathVariable("id") Integer clubId) {
         int result = clubService.deleteClub(clubId);
         return result > 0 ? Result.success("删除成功") : Result.error("删除失败");
-    }
-
-    @GetMapping("/active")
-    public Result<List<Club>> getActiveClubs() {
-        List<Club> activeClubs = clubService.getActiveClubs();
-        return Result.success(activeClubs);
     }
 
     @GetMapping("/count")

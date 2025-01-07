@@ -16,10 +16,10 @@ import org.springframework.security.core.AuthenticationException;
 public class GlobalExceptionHandler {
     /**
      * @author : Katrien
-     * 处理所有未被其他更具体的异常处理器捕获的异常
-     * 打印异常堆栈，并返回一个通用的错误信息
+     * @description :处理所有未被其他更具体的异常处理器捕获的异常
      */
     @ExceptionHandler(Exception.class)
+    //异常处理方法
     public Result<Void> handleException(Exception e) {
         e.printStackTrace();
         return Result.error("服务器内部错误");

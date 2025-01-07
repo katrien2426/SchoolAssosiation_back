@@ -2,9 +2,12 @@ package com.katrien.mapper;
 
 import com.katrien.pojo.Club;
 import org.apache.ibatis.annotations.*;
-
 import java.util.List;
 
+/**
+ * @author : Katrien
+ * @description : 社团Mapper
+ */
 @Mapper
 public interface ClubMapper {
     @Select("SELECT c.*, u.real_name as presidentName, c.president_id as presidentId " +
@@ -31,25 +34,13 @@ public interface ClubMapper {
     @Delete("DELETE FROM clubs WHERE club_id = #{clubId}")
     int deleteClub(Integer clubId);
 
-    @Select("SELECT c.*, u.real_name as presidentName, c.president_id as presidentId " +
-            "FROM clubs c " +
-            "LEFT JOIN users u ON c.president_id = u.user_id " +
-            "WHERE c.status = 'active'")
-    List<Club> getActiveClubs();
-
     @Select("SELECT COUNT(*) FROM clubs")
     Integer selectCount(Object o);
-
-    @Select("SELECT c.*, u.real_name as presidentName " +
-            "FROM clubs c " +
-            "LEFT JOIN users u ON c.president_id = u.user_id " +
-            "WHERE c.club_name LIKE CONCAT('%', #{keyword}, '%')")
-    List<Club> searchClubs(String keyword);
 
     @Select("SELECT c.*, u.real_name as presidentName, c.president_id as presidentId " +
             "FROM clubs c " +
             "LEFT JOIN users u ON c.president_id = u.user_id " +
             "WHERE (#{keyword} IS NULL OR c.club_name LIKE CONCAT('%', #{keyword}, '%')) " +
             "AND (#{status} IS NULL OR c.status = #{status})")
-    List<Club> searchClubsByCondition(@Param("keyword") String keyword, @Param("status}") String status);
+    List<Club> searchClubsByCondition(@Param("keyword") String keyword, @Param("status") String status);
 }

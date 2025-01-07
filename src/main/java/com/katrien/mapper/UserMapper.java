@@ -2,9 +2,12 @@ package com.katrien.mapper;
 
 import com.katrien.pojo.User;
 import org.apache.ibatis.annotations.*;
-
 import java.util.List;
 
+/**
+ * @author : Katrien
+ * @description : 用户Mapper
+ */
 @Mapper
 public interface UserMapper {
     @Select("SELECT * FROM users WHERE user_id = #{userId}")

@@ -2,6 +2,10 @@ package com.katrien.pojo;
 
 import java.time.LocalDateTime;
 
+/**
+ * @author : Katrien
+ * @description :活动审批
+ */
 public class ActivityApproval {
     private Integer approvalId;
     private Integer activityId;

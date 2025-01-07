@@ -4,7 +4,7 @@ import lombok.Data;
 
 /**
  *  @author : Katrien
- *  封装通用的返回结果，包括状态码、消息和数据
+ *  @description :封装通用的返回结果，包括状态码、消息和数据
  * @param <T>
  */
 @Data

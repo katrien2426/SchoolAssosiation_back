@@ -2,10 +2,12 @@ package com.katrien.mapper;
 
 import com.katrien.pojo.Activity;
 import org.apache.ibatis.annotations.*;
-
-import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * @author : Katrien
+ * @description : 活动Mapper
+ */
 @Mapper
 public interface ActivityMapper {
     @Select({
@@ -59,14 +61,6 @@ public interface ActivityMapper {
             "FROM activities a " +
             "LEFT JOIN clubs c ON a.club_id = c.club_id " +
             "LEFT JOIN users u ON a.created_by = u.user_id " +
-            "WHERE a.created_by = #{advisorId} " +
-            "ORDER BY a.start_date DESC")
-    List<Activity> getActivitiesByAdvisorId(Integer advisorId);
-
-    @Select("SELECT a.*, c.club_name, u.username as creator_name " +
-            "FROM activities a " +
-            "LEFT JOIN clubs c ON a.club_id = c.club_id " +
-            "LEFT JOIN users u ON a.created_by = u.user_id " +
             "WHERE a.status = #{status} " +
             "ORDER BY a.start_date DESC")
     List<Activity> getByStatus(@Param("status") String status);
@@ -86,10 +80,6 @@ public interface ActivityMapper {
 
     @Delete("DELETE FROM activities WHERE activity_id = #{activityId}")
     int deleteActivity(Integer activityId);
-
-    @Update("UPDATE activities SET status=#{status} WHERE activity_id=#{id}")
-    int updateActivityStatus(@Param("id") Integer id, 
-                           @Param("status") String status);
 
     @Update("UPDATE activities SET status = 'ongoing' " +
             "WHERE status = 'approved' " +

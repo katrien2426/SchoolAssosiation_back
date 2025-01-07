@@ -7,11 +7,14 @@ import com.katrien.pojo.Finance;
 import com.katrien.service.FinanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author : Katrien
+ * @description : 财务控制器
+ */
 @RestController
 @RequestMapping("/api/finances")
 public class FinanceController {
@@ -26,7 +29,7 @@ public class FinanceController {
             @RequestParam(required = false) String endDate,
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size) {
-        
+
         PageHelper.startPage(page, size);
         List<Finance> finances = financeService.getFinancesByClubId(clubId, type);
         PageInfo<Finance> pageInfo = new PageInfo<>(finances);
