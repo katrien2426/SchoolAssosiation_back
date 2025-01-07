@@ -7,13 +7,13 @@ import java.util.List;
 
 @Mapper
 public interface ClubMapper {
-    @Select("SELECT c.*, u.real_name as presidentName " +
+    @Select("SELECT c.*, u.real_name as presidentName, c.president_id as presidentId " +
             "FROM clubs c " +
             "LEFT JOIN users u ON c.president_id = u.user_id " +
             "WHERE c.club_id = #{clubId}")
     Club getClubById(Integer clubId);
 
-    @Select("SELECT c.*, u.real_name as presidentName " +
+    @Select("SELECT c.*, u.real_name as presidentName, c.president_id as presidentId " +
             "FROM clubs c " +
             "LEFT JOIN users u ON c.president_id = u.user_id")
     List<Club> getAllClubs();
@@ -31,7 +31,7 @@ public interface ClubMapper {
     @Delete("DELETE FROM clubs WHERE club_id = #{clubId}")
     int deleteClub(Integer clubId);
 
-    @Select("SELECT c.*, u.real_name as presidentName " +
+    @Select("SELECT c.*, u.real_name as presidentName, c.president_id as presidentId " +
             "FROM clubs c " +
             "LEFT JOIN users u ON c.president_id = u.user_id " +
             "WHERE c.status = 'active'")
@@ -46,10 +46,10 @@ public interface ClubMapper {
             "WHERE c.club_name LIKE CONCAT('%', #{keyword}, '%')")
     List<Club> searchClubs(String keyword);
 
-    @Select("SELECT c.*, u.real_name as presidentName " +
+    @Select("SELECT c.*, u.real_name as presidentName, c.president_id as presidentId " +
             "FROM clubs c " +
             "LEFT JOIN users u ON c.president_id = u.user_id " +
             "WHERE (#{keyword} IS NULL OR c.club_name LIKE CONCAT('%', #{keyword}, '%')) " +
             "AND (#{status} IS NULL OR c.status = #{status})")
-    List<Club> searchClubsByCondition(@Param("keyword") String keyword, @Param("status") String status);
+    List<Club> searchClubsByCondition(@Param("keyword") String keyword, @Param("status}") String status);
 }

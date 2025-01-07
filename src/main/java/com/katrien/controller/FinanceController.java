@@ -54,6 +54,9 @@ public class FinanceController {
 
     @PostMapping
     public Result<Void> createFinance(@RequestBody Finance finance) {
+        if (finance.getTransactionDate() == null) {
+            return Result.error("交易日期不能为空");
+        }
         return financeService.createFinanceRecord(finance) ? 
                Result.success() : Result.error("创建财务记录失败");
     }

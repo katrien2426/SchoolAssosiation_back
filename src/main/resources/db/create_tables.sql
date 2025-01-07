@@ -82,7 +82,7 @@ CREATE TABLE club_honors (
     honor_id INT PRIMARY KEY AUTO_INCREMENT,
     honor_name VARCHAR(100) NOT NULL COMMENT '荣誉名称',
     club_id INT NOT NULL COMMENT '获奖社团ID',
-    honor_level ENUM('SCHOOL', 'CITY', 'PROVINCE', 'NATIONAL') NOT NULL COMMENT '荣誉级别：校级、市级、省级、国家级',
+    honor_level ENUM('school', 'city', 'province', 'national') NOT NULL COMMENT '荣誉级别：校级、市级、省级、国家级',
     award_time DATETIME NOT NULL COMMENT '获奖时间',
     issuing_authority VARCHAR(100) NOT NULL COMMENT '颁发单位',
     description TEXT COMMENT '描述',

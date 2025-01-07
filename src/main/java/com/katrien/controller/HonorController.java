@@ -1,6 +1,5 @@
 package com.katrien.controller;
 
-import com.katrien.common.Result;
 import com.katrien.pojo.Honor;
 import com.katrien.service.HonorService;
 import org.springframework.beans.factory.annotation.Autowired;
