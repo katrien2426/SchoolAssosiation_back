@@ -1,64 +1,51 @@
 package com.katrien.config;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
-    @author : Katrien
-    定义了一个认证拦截器，用于验证用户是否已登录
-    实现了HandlerInterceptor接口，用于在Spring MVC请求处理过程中拦截请求
+ * @author : Katrien
+ * 定义了一个认证拦截器，用于验证用户是否已登录
+ * 实现了HandlerInterceptor接口，用于在Spring MVC请求处理过程中拦截请求
+ *
  */
+@Component
 public class AuthInterceptor implements HandlerInterceptor {
 
-    // 发送未授权响应
-    private void sendUnauthorizedResponse(HttpServletResponse response) throws IOException {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.setHeader("WWW-Authenticate", "Bearer realm=\"api\"");
-        response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write("{\"code\":401,\"message\":\"未登录\"}");
-    }
+    private static final String BEARER_PREFIX = "Bearer ";
+    private static final String TOKEN_PATTERN = "^user_\\d+$";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // 允许跨域
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
-        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-        response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("Access-Control-Expose-Headers", "Authorization");  // 允许前端访问Authorization头
-        
-        // 如果是OPTIONS请求，直接放行
-        if (request.getMethod().equalsIgnoreCase("OPTIONS")) {
-            response.setStatus(HttpServletResponse.SC_OK);
-            return true;
+        String authHeader = request.getHeader("Authorization");
+
+        if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
+            sendErrorResponse(response, "Missing or invalid Authorization header");
+            return false;
         }
 
-        // 打印请求信息
-        System.out.println("=== Auth Debug Info ===");
-        System.out.println("Request URI: " + request.getRequestURI());
-        System.out.println("Request Method: " + request.getMethod());
-        System.out.println("Authorization Header: " + request.getHeader("Authorization"));
+        String token = authHeader.substring(BEARER_PREFIX.length());
 
-        // 从请求头中获取token
-        String token = request.getHeader("Authorization");
-        if (token != null && token.startsWith("Bearer ")) {
-            token = token.substring(7).trim();  // 添加 trim() 去除可能的空格
-            System.out.println("Parsed token: " + token);
-            // 验证token格式是否正确（这里假设token格式为"user_数字"）
-            if (token.matches("^user_\\d+$")) {  // 添加 ^ 和 $ 确保完全匹配
-                // 打印成功信息
-                System.out.println("Token validation successful");
-                return true;
-            }
-            System.out.println("Token format invalid: " + token);
-        } else {
-            System.out.println("No valid Authorization header found");
+        if (!isValidToken(token)) {
+            sendErrorResponse(response, "Invalid token");
+            return false;
         }
 
-        // 如果没有token或token无效，返回401未授权
-        sendUnauthorizedResponse(response);
-        return false;
+        // Token 验证成功
+        return true;
+    }
+
+    private boolean isValidToken(String token) {
+        // TODO: 实现更复杂的 token 验证逻辑
+        return token.matches(TOKEN_PATTERN);
+    }
+
+    private void sendErrorResponse(HttpServletResponse response, String message) throws IOException {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.getWriter().write(String.format("{\"error\": \"%s\"}", message));
     }
 }
