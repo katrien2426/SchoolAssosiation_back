@@ -30,9 +30,16 @@ public interface FinanceMapper {
         "<if test='clubId != null'>",
         "  AND f.club_id = #{clubId}",
         "</if>",
-        "<if test='type != null'>",
+        "<if test='type != null and type != \"\"'>",
         "  AND LOWER(f.type) = LOWER(#{type})",
         "</if>",
+        "<if test='startDate != null and startDate != \"\"'>",
+        "  AND DATE(f.transaction_date) >= DATE(#{startDate})",
+        "</if>",
+        "<if test='endDate != null and endDate != \"\"'>",
+        "  AND DATE(f.transaction_date) &lt;= DATE(#{endDate})",
+        "</if>",
+        "ORDER BY f.transaction_date DESC",
         "</script>"
     })
     @Results({
@@ -42,7 +49,12 @@ public interface FinanceMapper {
         @Result(property = "recordedBy", column = "recorded_by"),
         @Result(property = "clubName", column = "club_name")
     })
-    List<Finance> getFinancesByClubId(@Param("clubId") Integer clubId, @Param("type") String type);
+    List<Finance> getFinancesByClubId(
+        @Param("clubId") Integer clubId, 
+        @Param("type") String type,
+        @Param("startDate") String startDate,
+        @Param("endDate") String endDate
+    );
 
     @Insert("INSERT INTO finances(club_id, amount, type, description, transaction_date, recorded_by) " +
             "VALUES(#{clubId}, #{amount}, #{type}, #{description}, #{transactionDate}, #{recordedBy})")
@@ -64,9 +76,19 @@ public interface FinanceMapper {
         "<if test='clubId != null'>",
         "  AND club_id = #{clubId}",
         "</if>",
+        "<if test='startDate != null and startDate != \"\"'>",
+        "  AND DATE(transaction_date) >= DATE(#{startDate})",
+        "</if>",
+        "<if test='endDate != null and endDate != \"\"'>",
+        "  AND DATE(transaction_date) &lt;= DATE(#{endDate})",
+        "</if>",
         "</script>"
     })
-    Double getTotalIncome(@Param("clubId") Integer clubId);
+    Double getTotalIncome(
+        @Param("clubId") Integer clubId,
+        @Param("startDate") String startDate,
+        @Param("endDate") String endDate
+    );
 
     @Select({
         "<script>",
@@ -75,7 +97,17 @@ public interface FinanceMapper {
         "<if test='clubId != null'>",
         "  AND club_id = #{clubId}",
         "</if>",
+        "<if test='startDate != null and startDate != \"\"'>",
+        "  AND DATE(transaction_date) >= DATE(#{startDate})",
+        "</if>",
+        "<if test='endDate != null and endDate != \"\"'>",
+        "  AND DATE(transaction_date) &lt;= DATE(#{endDate})",
+        "</if>",
         "</script>"
     })
-    Double getTotalExpense(@Param("clubId") Integer clubId);
+    Double getTotalExpense(
+        @Param("clubId") Integer clubId,
+        @Param("startDate") String startDate,
+        @Param("endDate") String endDate
+    );
 }

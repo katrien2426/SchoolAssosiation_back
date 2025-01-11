@@ -11,4 +11,5 @@ public interface ClubService {
     int deleteClub(Integer clubId);
     Integer getClubCount();
     List<Club> searchClubsByCondition(String keyword, String status);
+    List<Club> getClubsWithoutPresident();
 }

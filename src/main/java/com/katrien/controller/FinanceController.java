@@ -21,6 +21,7 @@ public class FinanceController {
     @Autowired
     private FinanceService financeService;
 
+    // 分页查询财务记录
     @GetMapping
     public Result<Map<String, Object>> getFinances(
             @RequestParam(required = false) String type,
@@ -31,18 +32,18 @@ public class FinanceController {
             @RequestParam(defaultValue = "10") Integer size) {
 
         PageHelper.startPage(page, size);
-        List<Finance> finances = financeService.getFinancesByClubId(clubId, type);
+        List<Finance> finances = financeService.getFinancesByClubId(clubId, type, startDate, endDate);
         PageInfo<Finance> pageInfo = new PageInfo<>(finances);
 
         Map<String, Object> result = new HashMap<>();
         result.put("records", pageInfo.getList());
         result.put("total", pageInfo.getTotal());
 
-        // 添加统计信息
+        // 添加统计信息，使用相同的日期范围
         Map<String, Object> summary = new HashMap<>();
-        summary.put("totalIncome", financeService.getTotalIncome(clubId));
-        summary.put("totalExpense", financeService.getTotalExpense(clubId));
-        summary.put("balance", financeService.getBalance(clubId));
+        summary.put("totalIncome", financeService.getTotalIncome(clubId, startDate, endDate));
+        summary.put("totalExpense", financeService.getTotalExpense(clubId, startDate, endDate));
+        summary.put("balance", financeService.getBalance(clubId, startDate, endDate));
         result.put("summary", summary);
 
         return Result.success(result);

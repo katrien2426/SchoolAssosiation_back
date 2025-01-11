@@ -47,4 +47,9 @@ public class ClubServiceImpl implements ClubService {
     public List<Club> searchClubsByCondition(String keyword, String status) {
         return clubMapper.searchClubsByCondition(keyword, status);
     }
+
+    @Override
+    public List<Club> getClubsWithoutPresident() {
+        return clubMapper.getClubsWithoutPresident();
+    }
 }

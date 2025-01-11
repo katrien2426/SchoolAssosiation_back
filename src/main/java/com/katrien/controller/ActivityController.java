@@ -169,7 +169,6 @@ public class ActivityController {
         
         Integer userId = (Integer) request.get("userId");
         String comments = (String) request.get("comments");
-        String status = (String) request.get("status");
         
         if (userId == null || comments == null || comments.trim().isEmpty()) {
             return Result.error("用户ID和拒绝理由不能为空");
@@ -195,7 +194,7 @@ public class ActivityController {
         }
 
         // 更新活动状态
-        activity.setStatus(status != null ? status : "draft");
+        activity.setStatus("draft");
         return activityService.updateActivity(activity) ? 
             Result.success() : Result.error("拒绝失败");
     }

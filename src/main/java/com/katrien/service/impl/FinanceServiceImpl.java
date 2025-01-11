@@ -19,7 +19,12 @@ public class FinanceServiceImpl implements FinanceService {
 
     @Override
     public List<Finance> getFinancesByClubId(Integer clubId, String type) {
-        return financeMapper.getFinancesByClubId(clubId, type);
+        return financeMapper.getFinancesByClubId(clubId, type, null, null);
+    }
+
+    @Override
+    public List<Finance> getFinancesByClubId(Integer clubId, String type, String startDate, String endDate) {
+        return financeMapper.getFinancesByClubId(clubId, type, startDate, endDate);
     }
 
     @Override
@@ -39,16 +44,31 @@ public class FinanceServiceImpl implements FinanceService {
 
     @Override
     public Double getTotalIncome(Integer clubId) {
-        return financeMapper.getTotalIncome(clubId);
+        return financeMapper.getTotalIncome(clubId, null, null);
+    }
+
+    @Override
+    public Double getTotalIncome(Integer clubId, String startDate, String endDate) {
+        return financeMapper.getTotalIncome(clubId, startDate, endDate);
     }
 
     @Override
     public Double getTotalExpense(Integer clubId) {
-        return financeMapper.getTotalExpense(clubId);
+        return financeMapper.getTotalExpense(clubId, null, null);
+    }
+
+    @Override
+    public Double getTotalExpense(Integer clubId, String startDate, String endDate) {
+        return financeMapper.getTotalExpense(clubId, startDate, endDate);
     }
 
     @Override
     public Double getBalance(Integer clubId) {
         return getTotalIncome(clubId) - getTotalExpense(clubId);
+    }
+
+    @Override
+    public Double getBalance(Integer clubId, String startDate, String endDate) {
+        return getTotalIncome(clubId, startDate, endDate) - getTotalExpense(clubId, startDate, endDate);
     }
 }

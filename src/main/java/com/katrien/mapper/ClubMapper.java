@@ -43,4 +43,9 @@ public interface ClubMapper {
             "WHERE (#{keyword} IS NULL OR c.club_name LIKE CONCAT('%', #{keyword}, '%')) " +
             "AND (#{status} IS NULL OR c.status = #{status})")
     List<Club> searchClubsByCondition(@Param("keyword") String keyword, @Param("status") String status);
+
+    @Select("SELECT c.*, NULL as presidentName, NULL as presidentId " +
+            "FROM clubs c " +
+            "WHERE c.president_id IS NULL")
+    List<Club> getClubsWithoutPresident();
 }

@@ -10,6 +10,7 @@ import java.util.List;
  */
 @Mapper
 public interface ActivityMapper {
+    // 通过 XML 脚本形式来构建灵活的 SQL 查询
     @Select({
         "<script>",
         "SELECT a.*, c.club_name, u.username as creator_name",

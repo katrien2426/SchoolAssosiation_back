@@ -62,4 +62,10 @@ public class ClubController {
         List<Club> clubs = clubService.searchClubsByCondition(keyword, status);
         return Result.success(clubs);
     }
+
+    @GetMapping("/without-president")
+    public Result<List<Club>> getClubsWithoutPresident() {
+        List<Club> clubs = clubService.getClubsWithoutPresident();
+        return Result.success(clubs);
+    }
 }
